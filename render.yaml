@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: wallet-transfer-api
+    runtime: docker
+    plan: free
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+      - key: APP_AUTH_TOKENS
+        sync: false
+      - key: APP_CORS_ALLOWED_ORIGINS
+        sync: false

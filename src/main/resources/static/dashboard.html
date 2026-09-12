@@ -1,0 +1,79 @@
+<!doctype html>
+    <html lang="en">
+        <head>
+            <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+            <title>Wallet service metrics</title>
+            <style>
+                body{
+                    font:16px system-ui;
+                    background:#111827;
+                    color:#e5e7eb;
+                    margin:2rem;
+                    max-width:850px
+                }
+                h1{
+                    color:#67e8f9
+                }
+                .grid{
+                    display:grid;
+                    grid-template-columns:repeat(3,1fr);
+                    gap:1rem
+                }
+                .card{
+                    background:#1f2937;
+                    padding:1rem;
+                    border-radius:.6rem
+                }
+                .num{
+                    font-size:2rem;
+                    color:#a7f3d0
+                }
+                small{
+                    color:#9ca3af
+                }
+                code{
+                    white-space:pre-wrap
+                }
+            </style>
+        </head>
+        <body>
+            <h1>Wallet transfer metrics</h1>
+            <p>Polling the local Prometheus endpoint every 10 seconds. This page is intentionally public; keep <code>/actuator/prometheus</code> behind an authenticated monitor in production.</p>
+            <div class="grid">
+                <div class="card">
+                    <small>Completed transfers</small>
+                    <div id="created" class="num">–</div>
+                </div>
+                <div class="card">
+                    <small>Declined transfers</small>
+                    <div id="declined" class="num">–</div>
+                </div>
+                <div class="card">
+                    <small>Idempotent replays</small>
+                    <div id="replay" class="num">–</div>
+                </div>
+            </div>
+            <p id="updated">
+                <small>Loading…</small>
+            </p>
+            <script>
+                const value=(t,n)=>{
+                    const m=t.match(new RegExp('^'+n+'(?:\\{[^}]*\\})?\\s+([0-9.eE+-]+)','m'));
+                    return m?Number(m[1]).toLocaleString():'0'
+                };
+                async function load(){
+                    try{
+                        const t=await (await fetch('/actuator/prometheus')).text();
+                        created.textContent=value(t,'wallet_transfers_created_total');
+                        declined.textContent=value(t,'wallet_transfers_declined_total');
+                        replay.textContent=value(t,'wallet_transfers_idempotent_replay_total');
+                        updated.innerHTML='<small>Updated '+new Date().toLocaleTimeString()+'</small>'
+                    }catch(e){
+                        updated.innerHTML='<small>Metrics unavailable: '+e.message+'</small>'
+                    }
+                }
+                load();
+                setInterval(load,10000)
+            </script>
+        </body>
+    </html>
