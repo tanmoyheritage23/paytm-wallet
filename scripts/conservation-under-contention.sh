@@ -12,6 +12,7 @@ for i in $(seq 1 "$rounds"); do
   amount=$((RANDOM % 500 + 1)); key="contention-$i-$RANDOM"
   body=$(printf '{"from":"%s","to":"%s","amount_paise":%s,"idempotency_key":"%s"}' "$from" "$to" "$amount" "$key")
   curl -fsS -X POST "$base_url/transfers" -H "Authorization: Bearer ${tokens[$from_index]}" -H 'Content-Type: application/json' -d "$body" -o "$temp_dir/result_$i.json" &
+  while [ "$(jobs -r | wc -l)" -ge 10 ]; do sleep 0.1; done
 done
 wait
 after=$(total); echo "before=$before after=$after"
