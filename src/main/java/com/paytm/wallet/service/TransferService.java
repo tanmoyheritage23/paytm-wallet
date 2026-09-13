@@ -64,7 +64,7 @@ public class TransferService {
         }
         if (debited) {
             transfers.finish(id, TransferStatus.COMPLETED, null);
-            metrics.counter("wallet.transfers.created").increment();
+            metrics.counter("wallet.transfers").increment();
             log.atInfo().addKeyValue("event", "wallet_debited").addKeyValue("transfer_id", id)
                     .addKeyValue("wallet_id", request.from()).addKeyValue("amount_paise", request.amount_paise()).log("Wallet debited");
             log.atInfo().addKeyValue("event", "wallet_credited").addKeyValue("transfer_id", id)

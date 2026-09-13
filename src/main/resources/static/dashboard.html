@@ -64,7 +64,7 @@
                 async function load(){
                     try{
                         const t=await (await fetch('/actuator/prometheus')).text();
-                        created.textContent=value(t,'wallet_transfers_created_total');
+                        created.textContent=value(t,'wallet_transfers_total');
                         declined.textContent=value(t,'wallet_transfers_declined_total');
                         replay.textContent=value(t,'wallet_transfers_idempotent_replay_total');
                         updated.innerHTML='<small>Updated '+new Date().toLocaleTimeString()+'</small>'
