@@ -834,7 +834,7 @@ TREASURY=1e3a26a1-2bb3-4464-83bb-020cf179d21c
 
 scripts/concurrent-wallet-create.sh $BASE token-alice 20
 scripts/idempotent-retry-storm.sh $BASE token-alice $ALICE $BOB 100 15
-scripts/conservation-under-contention.sh $BASE $ALICE:token-alice,$BOB:token-bob,$TREASURY:token-treasury 100
+scripts/conservation-under-contention.sh $BASE ${ALICE}:token-alice,${BOB}:token-bob,${TREASURY}:token-treasury 100
 ```
 
 ### Against a local Docker Compose instance (fresh database)
@@ -872,7 +872,7 @@ Now run the scripts:
 BASE=http://localhost:8080
 scripts/concurrent-wallet-create.sh $BASE token-alice 20
 scripts/idempotent-retry-storm.sh $BASE token-alice $ALICE $BOB 100 15
-scripts/conservation-under-contention.sh $BASE $ALICE:token-alice,$BOB:token-bob,$TREASURY:token-treasury 100
+scripts/conservation-under-contention.sh $BASE ${ALICE}:token-alice,${BOB}:token-bob,${TREASURY}:token-treasury 100
 ```
 
 For `conservation-under-contention.sh`, each `WALLET_ID:TOKEN` pair must use the token that owns that wallet. The scripts exit non-zero when the claimed invariant fails.
